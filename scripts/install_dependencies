@@ -1,3 +1,10 @@
 #!/bin/bash
-yum install -y httpd
 
+name="$(cat /etc/os-release | grep -Eo "^NAME=\"[^\"]+\"" | sed -e 's/^.*="//' -e 's/"$//')"
+if [[ $name == "Ubuntu" ]]; then
+  apt-get install -y apache2
+elif [[ $name == "Amazon Linux AMI" ]]; then
+  yum install -y httpd
+else
+  printf "Distribution ${name} is not supported yet.\n"  
+fi
